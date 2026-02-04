@@ -1,69 +1,80 @@
 # Kafka Demo Application
 
-Spring Boot 3.4 + Apache Kafka demo application with auto-start Docker containers.
+Spring Boot 3.4 приложение с Apache Kafka, демонстрирующее Producer/Consumer паттерн.
 
-## Requirements
+## Требования
 
 - Java 21+
-- Maven 3.9+
-- Docker Desktop (for Kafka containers)
+- Docker Desktop (для Kafka)
 
-## Quick Start
+## Быстрый старт
 
 ```bash
-# Build
-mvn clean package -DskipTests
+# Запуск приложения (автоматически поднимает Kafka через Docker Compose)
+./gradlew bootRun
 
-# Run (Docker Compose starts automatically)
-mvn spring-boot:run
+# Или сборка и запуск JAR
+./gradlew bootJar
+java -jar build/libs/kafka-demo-1.0.0-SNAPSHOT.jar
 ```
 
-## Features
+## Gradle команды
 
-- **Spring Boot 3.4.2** with Java 21
-- **Apache Kafka 3.9** (KRaft mode, no Zookeeper)
-- **Auto-start Docker containers** via `spring-boot-docker-compose`
-- **Kafka UI** at http://localhost:8080
-- **REST API** at http://localhost:8081
-- **Testcontainers** for integration tests
+| Команда | Описание |
+|---------|----------|
+| `./gradlew bootRun` | Запуск приложения |
+| `./gradlew build` | Полная сборка + тесты |
+| `./gradlew build -x test` | Сборка без тестов |
+| `./gradlew test` | Запуск тестов |
+| `./gradlew clean` | Очистка build/ |
+| `./gradlew dependencies` | Показать дерево зависимостей |
+| `./gradlew bootJar` | Собрать executable JAR |
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/kafka` | Send message to Kafka |
-| GET | `/api/kafka/health` | Health check |
-| GET | `/actuator/health` | Actuator health |
-
-## Send Test Message
-
 ```bash
+# Отправить сообщение в Kafka
 curl -X POST http://localhost:8081/api/kafka \
   -H "Content-Type: application/json" \
   -d '{"field1":"hello","field2":"world"}'
+
+# Health check
+curl http://localhost:8081/api/kafka/health
+
+# Actuator
+curl http://localhost:8081/actuator/health
 ```
 
-## Project Structure
+## Порты
+
+| Сервис | Порт |
+|--------|------|
+| Application | 8081 |
+| Kafka Broker | 9092 |
+| Kafka UI | 8080 |
+
+## Структура проекта
 
 ```
-├── compose.yaml              # Docker Compose (auto-started)
-├── pom.xml                   # Maven config
+kafka-app-demo/
+├── build.gradle.kts          # Gradle build (Kotlin DSL)
+├── settings.gradle.kts       # Gradle settings
+├── compose.yaml              # Docker Compose (Kafka + UI)
+├── gradlew                   # Gradle Wrapper (Unix)
+├── gradlew.bat               # Gradle Wrapper (Windows)
 └── src/
-    └── main/
-        ├── java/.../pandcdemo/
-        │   ├── PAndCDemoApplication.java
-        │   ├── KafkaConfig.java
-        │   ├── KafkaController.java
-        │   ├── KafkaConsumer.java
-        │   └── KafkaModel.java
-        └── resources/
-            └── application.properties
+    ├── main/
+    │   ├── java/             # Java sources
+    │   └── resources/
+    │       └── application.properties
+    └── test/
+        └── java/             # Integration tests (Testcontainers)
 ```
 
-## Run Tests
+## Технологии
 
-```bash
-mvn test
-```
-
-Tests use Testcontainers (separate from compose.yaml).
+- Spring Boot 3.4.2
+- Apache Kafka 3.9 (KRaft mode)
+- Testcontainers 2.0.3
+- Gradle 9.3.1 (Kotlin DSL)
+- Java 21
