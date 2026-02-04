@@ -45,6 +45,9 @@ dependencies {
     testImplementation "org.testcontainers:testcontainers-kafka"
     testImplementation 'org.awaitility:awaitility'
     
+    // Fix for commons-compress/commons-io compatibility (Testcontainers)
+    testImplementation 'commons-io:commons-io:2.18.0'
+    
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 }

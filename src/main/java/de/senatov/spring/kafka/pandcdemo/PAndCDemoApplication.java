@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class PAndCDemoApplication {
 
     public static void main(String[] args) {
-        log.info("Starting Kafka Demo Application...");
+        log.info("Starting Kafka App Demo...");
         SpringApplication.run(PAndCDemoApplication.class, args);
     }
 }
