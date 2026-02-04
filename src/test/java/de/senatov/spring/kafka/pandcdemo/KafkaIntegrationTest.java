@@ -11,19 +11,20 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.kafka.KafkaContainer;
-import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.kafka.ConfluentKafkaContainer;
+
+import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 class KafkaIntegrationTest {
 
     @Container
-    static KafkaContainer kafka = new KafkaContainer(
-            DockerImageName.parse("apache/kafka:3.8.1")
-    );
+    static ConfluentKafkaContainer kafka = new ConfluentKafkaContainer("confluentinc/cp-kafka:7.7.1")
+            .withStartupTimeout(Duration.ofMinutes(3));
 
     @LocalServerPort
     private int port;
@@ -38,7 +39,12 @@ class KafkaIntegrationTest {
     }
 
     @Test
-    void shouldSendAndReceiveMessage() {
+    void shouldSendMessage() {
+        // Wait for Kafka to be fully ready
+        await().atMost(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofSeconds(2))
+                .until(kafka::isRunning);
+
         // Given
         KafkaModel message = KafkaModel.builder()
                 .field1("test-field-1")
