@@ -58,6 +58,12 @@ dependencyManagement {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force 'commons-io:commons-io:2.18.0'
+    }
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

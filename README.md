@@ -1,5 +1,19 @@
 # Kafka Demo Application
 
+
+
+
+**File**: `Docs/Preview1.png`
+<div style="text-align: center;" >
+  <img
+    src="Docs/Preview1.png"
+    alt="Preview FrontEnd"
+    title="Preview"
+    style="max-width: 100%; height: auto; border: 1px solid #133347ff; border-radius: 8px;" />
+</div>
+
+
+
 Spring Boot 3.4 приложение с Apache Kafka, демонстрирующее Producer/Consumer паттерн.
 
 ## Требования
@@ -172,7 +186,7 @@ client version 1.32 is too old. Minimum supported API version is 1.44
 ```
 Web server failed to start. Port 8081 was already in use.
 ```
-**Решение:** 
+**Решение:**
 ```bash
 # Найти процесс
 lsof -i :8081
