@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
+    <!-- Цветной вывод в консоль -->
+    <conversionRule conversionWord="clr"
+                    converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d %5p %40.40c:%4L - %m%n</pattern>
+            <pattern>
+                %clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} 
+                %clr(%5p) 
+                %clr(%-40.40c){cyan}:%clr(%4L){yellow} - 
+                %m%n%wEx
+            </pattern>
         </encoder>
     </appender>
 
+    <!-- Уменьшаем шум от Spring -->
     <logger name="org.springframework" level="warn"/>
+    <logger name="org.hibernate" level="warn"/>
 
-    <root level="debug">
+    <!-- Основной уровень логирования -->
+    <root level="info">
         <appender-ref ref="console"/>
     </root>
 
